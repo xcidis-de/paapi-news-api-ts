@@ -72,6 +72,3 @@ to your root
         console.error('Error:', error);
     }
 })();
-
-
-test push protections
