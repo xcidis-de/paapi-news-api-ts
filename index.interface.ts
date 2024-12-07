@@ -62,33 +62,66 @@
         description = 'description',
         content = 'content',
     }
+    
+    export enum NewsApiLanguages {
+        ar = 'ar',
+        de = 'de',
+        en = 'en',
+        es = 'es',
+        fr = 'fr',
+        he = 'he',
+        it = 'it',
+        nl = 'nl',
+        no = 'no',
+        pt = 'pt',
+        ru = 'ru',
+        sv = 'sv',
+        ud = 'ud',
+        zh = 'zh'
+    }
 
+    export enum NewsApiSortBy {
+        relevancy = 'relevancy',
+        popularity = 'popularity',
+        publishedAt = 'publishedAt',
+    }
+    
     export interface NewsApiTopHeadlineRequestParams {
         sources?: string;
         q?: string;
-        category?: string;
+        category?: NewsApiCategories;
         country?: NewsApiCountries;
         pageSize?: number;
         page?: number;
     }
 
+    export enum NewsApiCategories {
+        business = 'business',
+        entertainment = 'entertainment',
+        general = 'general',
+        health = 'health',
+        science = 'science',
+        sports = 'sports',
+        technology = 'technology',
+    }
+
     export interface NewsApiEverythingRequestParams {
-        query?: string;
+        q?: string;
         searchIn?: NewsApiSearchIn;
         sources?: string; // sources endpoint "source1,source2,source3"
         domains?: string; // "bbc.co.uk,techcrunch.com,engadget.com"
         excludeDomains?: string; // "bbc.co.uk,techcrunch.com,engadget.com"
         from?: Date; // Oldest according to plan
         to?: Date; // defaults now
-        language?: string; // 'en', 'es', 'fr', etc.
-        sortBy?: string;
+        language?: NewsApiLanguages; // 'en', 'es', 'fr', etc.
+        sortBy?: NewsApiSortBy;
         pageSize?: number // 20 is the default, 100 is the maximum;
         page?: number; // 1 is the default
     }
     
     export interface NewsApiSourcesRequestParams {
-        category?: string;
-        language?: string;
+        category?: NewsApiCategories;
+        language?: NewsApiLanguages;
         country?: NewsApiCountries;
     }
 
