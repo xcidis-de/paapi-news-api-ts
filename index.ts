@@ -12,19 +12,25 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 const BASE_URL = 'https://newsapi.org/v2';
 
 @Injectable()
-export class NewsApiService {
+export class NewsApiLibService {
     private API_KEY: string;
+    private HEADER_KEY: string = 'X-API-KEY';
     constructor(private configService: ConfigService) {
-        this.API_KEY = this.configService.get<string>('newsApi.apiKey') as string;
+        const key = this.configService.getOrThrow<string>('newsApi.apiKey');
+        this.API_KEY = key
     }
 
-    async getTopHeadlines(params: NewsApiTopHeadlineRequestParams): Promise<NewsApiQueryResponse> {
+    async getTopHeadlines(filter: NewsApiTopHeadlineRequestParams): Promise<NewsApiQueryResponse> {
         try {
+            if (filter['query']) {
+                filter.q = filter['query'];
+                delete filter['query'];
+            }
             const response = await axios.get(`${BASE_URL}/top-headlines`, {
                 headers: {
-                    'X-Api-Key': this.API_KEY
+                    [this.HEADER_KEY]: this.API_KEY
                 },
-                params
+                params: filter
             });
             return response.data;
         } catch (error) {
@@ -33,13 +39,17 @@ export class NewsApiService {
         }
     }
 
-    async getEverything(params: NewsApiEverythingRequestParams): Promise<NewsApiQueryResponse> {
+    async getEverything(filter: NewsApiEverythingRequestParams): Promise<NewsApiQueryResponse> {
         try {
+            if (filter['query']) {
+                filter.q = filter['query'];
+                delete filter['query'];
+            }
             const response = await axios.get(`${BASE_URL}/everything`, {
                 headers: {
-                    'X-Api-Key': this.API_KEY
+                    [this.HEADER_KEY]: this.API_KEY
                 },
-                params
+                params: filter
             });
             return response.data;
         } catch (error) {
@@ -48,13 +58,13 @@ export class NewsApiService {
         }
     }
 
-    async getSources(params: NewsApiSourcesRequestParams = {}): Promise<NewsApiSourcesResponse> {
+    async getSources(filter: NewsApiSourcesRequestParams = {}): Promise<NewsApiSourcesResponse> {
         try {
             const response = await axios.get(`${BASE_URL}/sources`, {
                 headers: {
-                    'X-Api-Key': this.API_KEY
+                    [this.HEADER_KEY]: this.API_KEY
                 },
-                params
+                params: filter
             });
             return response.data;
         } catch (error) {
@@ -68,8 +78,8 @@ export * from './index.interface';
 
 @Module({
     imports: [],
-    providers: [NewsApiService, ConfigService],
-    exports: [NewsApiService, ConfigService]
+    providers: [NewsApiLibService, ConfigService],
+    exports: [NewsApiLibService, ConfigService]
   })
-export class NewsApiServiceModule {}
+export class NewsApiLibServiceModule {}
   
