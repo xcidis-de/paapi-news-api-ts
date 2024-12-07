@@ -4,7 +4,8 @@
   "description": "A typescript implemented api for fetching the news from https://newsapi.org/docs",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --build --watch ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "start:dev": "tsc --build --watch ./tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
