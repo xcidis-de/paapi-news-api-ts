@@ -58,17 +58,41 @@ to your root
 
 
 // Example usage
-(async () => {
-    try {
-        const headlines = await getTopHeadlines('us', 'technology');
-        console.log('Top headlines:', headlines);
+    constructor(
+        private newsApiLib: NewsApiLibService
+    ) {}
 
-        const everything = await getEverything('bitcoin');
-        console.log('Everything:', everything);
+    async getTopHeadlines(filter: NewsApiTopHeadlineRequestParams): Promise<GraphQLTopHeadlinesResponse> {
+        const response: NewsApiQueryResponse = await this.newsApiLib.getTopHeadlines(filter);
 
-        const sources = await getSources('technology', 'en', 'us');
-        console.log('Sources:', sources);
-    } catch (error) {
-        console.error('Error:', error);
+        return {
+            articles: response.articles,
+            page: {
+                pageSize: response.articles.length,
+                pageNumber: filter.page
+            },
+            totalResults: response.totalResults,
+        }
     }
-})();
+
+    async getEverything(filter: NewsApiEverythingRequestParams): Promise<GraphQLEverythingResponse> {
+        const response: NewsApiQueryResponse = await this.newsApiLib.getEverything(filter);
+        
+        return {
+            articles: response.articles,
+            page: {
+                pageSize: response.articles.length,
+                pageNumber: filter.page
+            },
+            totalResults: response.totalResults,
+        }
+    }
+    
+    async getSources(filter): Promise<GraphQLSourcesResponse> {
+        const res: NewsApiSourcesResponse = await this.newsApiLib.getSources(filter);
+        
+        return {
+            sources: res.sources,
+            totalResults: res.sources.length,
+        }
+    }
