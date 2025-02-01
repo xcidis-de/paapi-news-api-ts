@@ -7,7 +7,7 @@ import {
     NewsApiQueryResponse
 } from './index.interface';
 import { Injectable, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 const BASE_URL = 'https://newsapi.org/v2';
 
